@@ -5,26 +5,26 @@ const mysql = require('mysql');
 
 app.use(express.json());
 
-const connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'guideguy'
-});
+// const connection = mysql.createConnection({
+//   host     : 'localhost',
+//   user     : 'root',
+//   password : '',
+//   database : 'guideguy'
+// });
 
 
 app.use(cors({
   origin: 'http://localhost:3000'
 }));
 
-app.post('/', function(req, res) {
-  connection.connect();
-  connection.query('SELECT * FROM users', function (error, results, fields) {
-    if (error) throw error;
-    res.json(results);
-  });
-  connection.end();
-});
+// app.post('/', function(req, res) {
+//   connection.connect();
+//   connection.query('SELECT * FROM users', function (error, results, fields) {
+//     if (error) throw error;
+//     res.json(results);
+//   });
+//   connection.end();
+// });
 
 app.post('admin/places/add', function(req, res) {
   res.json(req.body);
