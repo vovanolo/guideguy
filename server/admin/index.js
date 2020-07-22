@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 const faker = require('faker');
-const { fake } = require('faker');
 
 //#region places
 
@@ -19,7 +18,7 @@ router.get('/places/:id', function(req, res) {
   });
 });
 
-router.post('/places/add', function(req, res) {
+router.post('/places', function(req, res) {
   pool.query(`INSERT INTO places (name, adress, latlng, description) VALUES ('${req.body.name}', '${req.body.adress}', '${req.body.latlng}', '${req.body.description}')`,
     function(error, results, fields) {
       if (error) throw error;
