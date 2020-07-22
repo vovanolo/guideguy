@@ -14,25 +14,26 @@ export default class Admin extends React.Component {
     }
   }
 
-  AddPlace() {
+  AddPlace(e) {
+    e.preventDefault();
     axios.post(`${this.state.serverHost}/admin/places/add`, {
       name: this.state.name,
       adress: this.state.adress,
       latlng: this.state.latlng,
       description: this.state.description,
-    })
+    }).then(res => console.log(res.data));
   }
 
   render() {
     return (
-      <div className='container ml-auto'>
-        <form onSubmit={this.AddPlace}>
-          <input type="text" value="eee" onChange={e => this.setState({name: e.currentTarget.value})} />
-          <input type="text" onChange={e => this.setState({adress: e.currentTarget.value})} />
+      <div className="container ml-auto">
+        <form onSubmit={e => this.AddPlace(e)}>
+          <input type="text" defaultValue="eee" placeholder="Name" onChange={e => this.setState({name: e.currentTarget.value})} />
+          <input type="text" placeholder="Adress" onChange={e => this.setState({adress: e.currentTarget.value})} />
           <br />
-          <input type="text" onChange={e => this.setState({latlng: e.currentTarget.value})} />
-          <input type="text" onChange={e => this.setState({description: e.currentTarget.value})} />
-          <input type="submit" />
+          <input type="text" placeholder="Lat. Lng." onChange={e => this.setState({latlng: e.currentTarget.value})} />
+          <textarea type="text" placeholder="Description" onChange={e => this.setState({description: e.currentTarget.value})} />
+          <input type="submit" value="Додати місце" />
         </form>
       </div>
     );
