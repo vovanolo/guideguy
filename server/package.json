@@ -15,6 +15,7 @@
     "mysql": "^2.18.1"
   },
   "devDependencies": {
+    "faker": "^4.1.0",
     "mysql-migrations": "^1.0.6",
     "nodemon": "^2.0.4",
     "volleyball": "^1.5.1"
