@@ -1,18 +1,22 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const volleyball = require('volleyball');
 const mysql = require('mysql');
+
+require('dotenv').config();
 
 app.use(express.json());
 app.use(cors({
   origin: 'http://localhost:3000'
 }));
+app.use(volleyball);
 
 // const connection = mysql.createConnection({
-//   host     : 'localhost',
-//   user     : 'root',
-//   password : '',
-//   database : 'guideguy'
+//   host     : process.env.DB_HOST,
+//   user     : process.env.DB_USERNAME,
+//   password : process.env.DB_PASSWORD,
+//   database : process.env.DB_DATABASE
 // });
 
 // app.post('/', function(req, res) {
@@ -28,5 +32,4 @@ app.post('/admin/places/add', function(req, res) {
   res.json(req.body);
 });
 
-const PORT = 3050;
-app.listen(PORT, () => console.log(`Server is running at port ${PORT}`));
+app.listen(process.env.APP_PORT, () => console.log(`Server is running at port ${process.env.APP_PORT}`));
