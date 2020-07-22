@@ -2,8 +2,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const volleyball = require('volleyball');
-const mysql = require('mysql');
-const { query } = require('express');
+const pool = require('./db');
 
 require('dotenv').config();
 
@@ -12,14 +11,6 @@ app.use(cors({
   origin: 'http://localhost:3000'
 }));
 app.use(volleyball);
-
-const pool = mysql.createPool({
-  connectionLimit: 10,
-  host     : process.env.DB_HOST,
-  user     : process.env.DB_USERNAME,
-  password : process.env.DB_PASSWORD,
-  database : process.env.DB_DATABASE
-});
 
 // app.post('/', function(req, res) {
 //   connection.connect();
