@@ -19,16 +19,17 @@ export default class Admin extends React.Component {
 
   AddPlace(e) {
     e.preventDefault();
-    axios.post(`${this.state.serverHost}/admin/places`, {
+    axios.post(`${this.state.serverHost}/places`, {
       name: this.state.name,
       adress: this.state.adress,
       latlng: this.state.latlng,
       description: this.state.description,
+      code: 'admin'
     }).then(res => console.log(res.data));
   }
 
   ViewPlace() {
-    axios.get(`${this.state.serverHost}/admin/places`).then(res => this.setState({places: res.data}))
+    axios.get(`${this.state.serverHost}/places`).then(res => this.setState({places: res.data}))
   }
 
   // DeletePlace() {
@@ -52,38 +53,34 @@ export default class Admin extends React.Component {
           <input type="file" placeholder="photo" />
 
           <input type="submit" className="btn btn-primary" value="Додати місце" />
-
-         
-         
-
         </form>
         
         <table class="table table-dark">
-        <thead>
-                  <tr>
-                    <th scope="col">id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">adress</th>
-                    <th scope="col">latlang</th>
-                  </tr>
-                </thead>
-            {this.state.places.map((place, index) => (
+          <thead>
+            <tr>
+              <th scope="col">id</th>
+              <th scope="col">Name</th>
+              <th scope="col">adress</th>
+              <th scope="col">latlang</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.state.places.reverse().map((place, index) => (
               // <li key={index}>{place.name}</li>
-                <tbody>
-                  <tr>
-                    <th key={index} scope="row">{place.id}</th>
-                    <td key={index}>{place.name}</td>
-                    <td key={index}>{place.adress}</td>
-                    <td key={index}>{place.latlng}</td>
+                  <tr key={index}>
+                    <th scope="row">{place.id}</th>
+                    <td>{place.name}</td>
+                    <td>{place.adress}</td>
+                    <td>{place.latlng}</td>
                     <td><button className="btn btn-warning">Edit</button></td>
                     <td><button className="btn btn-danger">Delete</button></td>
                   </tr>
-                </tbody>
             ))}
+          </tbody>
         </table>
 
 
-        <button onClick={() => axios.post(`${this.state.serverHost}/admin/seed/places`, {count:5})} className="btn btn-success">Go dani</button>
+        <button onClick={() => axios.post(`${this.state.serverHost}/admin/seed/places`, {count:5, code: 'admin'})} className="btn btn-success">Go dani</button>
 
 
       </div>
