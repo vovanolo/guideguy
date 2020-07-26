@@ -17,7 +17,7 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', CheckAdmin, (req, res) => {
-  pool.query(`INSERT INTO places (name, adress, latlng, description) VALUES ('${req.body.name}', '${req.body.adress}', '${req.body.latlng}', '${req.body.description}')`,
+  pool.query(`INSERT INTO places (name, address, latlng, description) VALUES ('${req.body.name}', '${req.body.address}', '${req.body.latlng}', '${req.body.description}')`,
     function(error, results, fields) {
       if (error) throw error;
       res.json({message: 'Place added successfully'});
@@ -31,7 +31,7 @@ router.patch('/:id', CheckAdmin, (req, res) => {
       res.json({message: `Error: No place with id ${req.params.id} found`});
     }
     else {
-      pool.query(`UPDATE places SET name='${req.body.name}', adress='${req.body.adress}', latlng='${req.body.latlng}', description='${req.body.latlng}' WHERE id='${req.params.id}'`, function(error, results) {
+      pool.query(`UPDATE places SET name='${req.body.name}', address='${req.body.address}', latlng='${req.body.latlng}', description='${req.body.latlng}' WHERE id='${req.params.id}'`, function(error, results) {
         if (error) throw error;
         else {
           res.json({message: 'Place updated successfully'});
