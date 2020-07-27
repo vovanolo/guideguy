@@ -6,7 +6,7 @@ const CheckAdmin = require('../middlewares/CheckAdmin');
 
 router.use(CheckAdmin);
 
-router.post('/seed/users', (req, res) => {
+router.post('/users', (req, res) => {
   const count = req.body.count;
   for (let i = 0; i < count; i++) {
     pool.query(`INSERT INTO users (username) VALUES ('${faker.internet.userName()}')`, (error, results) => {
@@ -16,7 +16,7 @@ router.post('/seed/users', (req, res) => {
   res.json({message: 'Users created successfully'});
 });
 
-router.post('/seed/places', (req, res) => {
+router.post('/places', (req, res) => {
   const count = req.body.count;
   for (let i = 0; i < count; i++) {
     pool.query(`INSERT INTO places (name, address, latlng, thumbnail, description) VALUES ('${faker.address.streetName()}', '${faker.address.streetAddress()}', '${faker.address.latitude()},${faker.address.longitude()}', '${faker.image.imageUrl()}', '${faker.lorem.paragraph(10)}')`, (error, results) => {
