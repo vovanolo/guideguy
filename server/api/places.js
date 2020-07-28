@@ -1,7 +1,9 @@
 const express = require('express');
-const router = express.Router();
+
 const pool = require('../db');
-const CheckAdmin = require('../middlewares/CheckAdmin');
+const { IsAdmin } = require('../middlewares');
+
+const router = express.Router();
 
 router.get('/', (req, res) => {
   pool.query('SELECT * FROM places', function(error, results) {
@@ -16,7 +18,7 @@ router.get('/:id', (req, res) => {
   });
 });
 
-router.post('/', CheckAdmin, (req, res) => {
+router.post('/', IsAdmin, (req, res) => {
   pool.query(`INSERT INTO places (name, address, latlng, description) VALUES ('${req.body.name}', '${req.body.address}', '${req.body.latlng}', '${req.body.description}')`,
     function(error, results, fields) {
       if (error) throw error;
@@ -25,7 +27,7 @@ router.post('/', CheckAdmin, (req, res) => {
   );
 });
 
-router.patch('/:id', CheckAdmin, (req, res) => {
+router.patch('/:id', IsAdmin, (req, res) => {
   pool.query(`SELECT id FROM places WHERE id='${req.params.id} LIMIT 1'`, function (error, results) {
     if (results.length <= 0) {
       res.json({message: `Error: No place with id ${req.params.id} found`});
@@ -41,7 +43,7 @@ router.patch('/:id', CheckAdmin, (req, res) => {
   });
 });
 
-router.delete('/:id', CheckAdmin, (req, res) => {
+router.delete('/:id', IsAdmin, (req, res) => {
   pool.query(`SELECT id FROM places WHERE id='${req.params.id} LIMIT 1'`, (error, results) => {
     if (results.length <= 0) {
       res.json({message: `Error: No place with id ${req.params.id} found`});
