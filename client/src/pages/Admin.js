@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default class Admin extends React.Component {
   constructor(props) {
@@ -25,24 +26,25 @@ export default class Admin extends React.Component {
       latlng: this.state.latlng,
       description: this.state.description,
       code: 'admin'
-    }).then(res => console.log(res.data));
+    }).then(res => this.setState({ places: [...this.state.places, res.data] }));
   }
 
   ViewPlace() {
     axios.get(`${this.state.serverHost}/places`).then(res => this.setState({places: res.data}))
   }
 
-  // DeletePlace() {
-  //   axios.delete(`${this.state.serverHost}/admin/places${this.state.id}`).
-  // }
+  DeletePlace() {
+    axios.delete(`${this.state.serverHost}/places/${this.state.id}`);
+  }
 
-  componentDidMount(){
+  componentDidMount() {
     this.ViewPlace();
   }
 
   render() {
     return (
       <div className="container ml-auto">
+        <Link to="/map">Map</Link>
         <h1>Admin</h1>
         <form onSubmit={e => this.AddPlace(e)}>
           <input type="text" className="form-control" defaultValue="eee" placeholder="Name" onChange={e => this.setState({name: e.currentTarget.value})} />
@@ -55,7 +57,7 @@ export default class Admin extends React.Component {
           <input type="submit" className="btn btn-primary" value="Додати місце" />
         </form>
         
-        <table class="table table-dark">
+        <table className="table table-dark">
           <thead>
             <tr>
               <th scope="col">id</th>
@@ -67,14 +69,14 @@ export default class Admin extends React.Component {
           <tbody>
             {this.state.places.reverse().map((place, index) => (
               // <li key={index}>{place.name}</li>
-                  <tr key={index}>
-                    <th scope="row">{place.id}</th>
-                    <td>{place.name}</td>
-                    <td>{place.adress}</td>
-                    <td>{place.latlng}</td>
-                    <td><button className="btn btn-warning">Edit</button></td>
-                    <td><button className="btn btn-danger">Delete</button></td>
-                  </tr>
+              <tr key={index}>
+                <th scope="row">{place.id}</th>
+                <td>{place.name}</td>
+                <td>{place.adress}</td>
+                <td>{place.latlng}</td>
+                <td><button className="btn btn-warning">Edit</button></td>
+                <td><button className="btn btn-danger">Delete</button></td>
+              </tr>
             ))}
           </tbody>
         </table>

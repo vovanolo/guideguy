@@ -33,7 +33,7 @@ class App extends React.Component {
                   <a className="nav-link" href="/">Home <span className="sr-only">(current)</span></a>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="/map">Map</a>
+                  <Link className="nav-link" to="/map">Map</Link>
                 </li>
                 <li className="nav-item">
                   <a className="nav-link" href="/about">About</a>
