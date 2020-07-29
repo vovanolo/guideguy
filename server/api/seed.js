@@ -2,11 +2,11 @@ const express = require('express');
 const faker = require('faker');
 
 const pool = require('../db');
-const { IsAdmin } = require('../middlewares');
+const { IsAdmin, IsLoggedIn } = require('../middlewares');
 
 const router = express.Router();
 
-router.use(IsAdmin);
+router.use(IsLoggedIn);
 
 router.post('/users', (req, res) => {
   const count = req.body.count;

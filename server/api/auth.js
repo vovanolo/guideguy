@@ -22,7 +22,8 @@ router.post('/signup', (req, res) => {
           if (error) throw error;
           pool.query(`SELECT id, username, role FROM users WHERE id='${data.insertId}'`, (error, data) => {
             if (error) throw error;
-            const jwtToken = jwt.sign(data[0], process.env.JWT_KEY);
+            const payload = data[0];
+            const jwtToken = jwt.sign(payload, process.env.JWT_KEY);
             res.json(jwtToken);
           });
         });

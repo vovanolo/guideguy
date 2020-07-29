@@ -30,7 +30,11 @@ export default class Admin extends React.Component {
   }
 
   ViewPlace() {
-    axios.get(`${this.state.serverHost}/places`).then(res => this.setState({places: res.data}))
+    axios.get(`${this.state.serverHost}/places`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.JWT_TOKEN}`
+      }
+    }).then(res => this.setState({places: res.data}))
   }
 
   DeletePlace() {
@@ -38,6 +42,9 @@ export default class Admin extends React.Component {
   }
 
   componentDidMount() {
+    if (!localStorage.JWT_TOKEN) {
+      return;
+    }
     this.ViewPlace();
   }
 

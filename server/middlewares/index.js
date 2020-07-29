@@ -25,7 +25,7 @@ function IsAdmin(req, res, next) {
   }
 }
 
-function LoggedIn(req, res, next) {
+function IsLoggedIn(req, res, next) {
   const authHeader = req.get('Authorization');
   if (authHeader != undefined) {
     const jwtToken = authHeader.split(' ')[1];
@@ -44,4 +44,4 @@ function LoggedIn(req, res, next) {
   }
 }
 
-module.exports = { IsAdmin, LoggedIn };
+module.exports = { IsAdmin, IsLoggedIn };
