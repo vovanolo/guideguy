@@ -6,7 +6,7 @@ const { IsAdmin, IsLoggedIn } = require('../middlewares');
 
 const router = express.Router();
 
-router.use(IsLoggedIn);
+router.use(IsAdmin);
 
 router.post('/users', (req, res) => {
   const count = req.body.count;
