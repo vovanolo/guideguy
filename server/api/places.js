@@ -1,4 +1,5 @@
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 
 const pool = require('../db');
@@ -25,9 +26,16 @@ router.post('/', IsAdmin, (req, res, next) => {
     function(error, results) {
       if (error) next(error);
       const code = crypto.randomBytes(15).toString('hex');
-      pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${code}')`, (error, results) => {
+      const payload = {
+        placeId: results.insertId,
+        code: code
+      };
+      jwt.sign(payload, process.env.JWT_KEY, (error, token) => {
         if (error) next(error);
-        res.json({ message: 'Place added successfully' });
+        pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${code}')`, (error, results) => {
+          if (error) next(error);
+          res.json({ token });
+        });
       });
     }
   );

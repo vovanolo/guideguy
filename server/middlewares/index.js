@@ -60,15 +60,4 @@ function errorHandler(error, req, res, next) {
   })
 }
 
-function CheckVisitCode(req, res, next) {
-  if (!req.body.visitCode) {
-    const error = new Error('Visit code is invalid');
-    res.status(400);
-    next(error);
-  }
-  else {
-    next();
-  }
-}
-
-module.exports = { IsAdmin, IsLoggedIn, notFound, errorHandler, CheckVisitCode };
+module.exports = { IsAdmin, IsLoggedIn, notFound, errorHandler };

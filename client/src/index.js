@@ -7,6 +7,7 @@ import './style.css';
 import App from './pages/App';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
+import Visit from './pages/Visit';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -21,6 +22,7 @@ ReactDOM.render(
         <Route path='/login'>
           <Login />
         </Route>
+        <Route path='/visit/:visitToken' component={Visit} />
       </Switch>
     </BrowserRouter>
   </React.StrictMode>,
