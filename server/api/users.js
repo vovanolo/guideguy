@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
     pool.query(`INSERT INTO users (username, password, role) VALUES ('${req.body.username}', '${password}', '${req.body.role}')`,
       (error, results) => {
         if (error) throw error;
-        res.json({ message: 'Place added successfully' });
+        res.json({ message: 'User added successfully' });
       }
     );
   });
@@ -51,7 +51,7 @@ router.patch('/:id', (req, res) => {
   });
 });
 
-router.delete('/:id', IsAdmin, (req, res) => {
+router.delete('/:id', (req, res) => {
   pool.query(`SELECT id FROM users WHERE id='${req.params.id} LIMIT 1'`, (error, results) => {
     if (results.length <= 0) {
       res.json({message: `Error: No user with id ${req.params.id} found`});
@@ -60,7 +60,7 @@ router.delete('/:id', IsAdmin, (req, res) => {
       pool.query(`DELETE FROM users WHERE id='${req.params.id}'`, (error, results) => {
         if (error) throw error;
         else {
-          res.json({ message: 'Place deleted successfully' });
+          res.json({ message: 'User deleted successfully' });
         }
       });
     }

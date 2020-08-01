@@ -18,7 +18,7 @@ router.post('/signup', (req, res) => {
         const username = req.body.username;
         const password = hashedPass;
 
-        pool.query(`INSERT INTO users (username, password, role) VALUES ('${username}', '${password}', 'user')`, (error, data) => {
+        pool.query(`INSERT INTO users (username, password) VALUES ('${username}', '${password}')`, (error, data) => {
           if (error) throw error;
           pool.query(`SELECT id, username, role FROM users WHERE id='${data.insertId}'`, (error, data) => {
             if (error) throw error;
