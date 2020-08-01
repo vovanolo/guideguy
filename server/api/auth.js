@@ -8,9 +8,10 @@ const router = express.Router();
 
 router.post('/signup', (req, res) => {
   pool.query(`SELECT id FROM users WHERE username='${req.body.username}'`, (error, data) => {
-    if (error) throw error;
+    if (error) next(error);
     if (data.length > 0) {
-      res.status(400).json({ message: 'This username is already taken' });
+      res.status(400);
+      next('This username is already taken');
     }
     else {
       // Signup user
@@ -19,9 +20,9 @@ router.post('/signup', (req, res) => {
         const password = hashedPass;
 
         pool.query(`INSERT INTO users (username, password) VALUES ('${username}', '${password}')`, (error, data) => {
-          if (error) throw error;
+          if (error) next(error);
           pool.query(`SELECT id, username, role FROM users WHERE id='${data.insertId}'`, (error, data) => {
-            if (error) throw error;
+            if (error) next(error);
             const payload = JSON.parse(JSON.stringify(data[0]));
             const jwtToken = jwt.sign(payload, process.env.JWT_KEY);
             res.json(jwtToken);
@@ -34,9 +35,10 @@ router.post('/signup', (req, res) => {
 
 router.post('/login', (req, res) => {
   pool.query(`SELECT * FROM users WHERE username='${req.body.username}'`, (error, data) => {
-    if (error) throw error;
+    if (error) next(error);
     if (data.length <= 0) {
-      res.status(404).json({ message: 'Check your login and password' });
+      res.status(404);
+      next('Check your login and password');
     }
     else {
       const password = req.body.password;
