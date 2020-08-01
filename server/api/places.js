@@ -1,4 +1,5 @@
 const express = require('express');
+const crypto = require('crypto');
 
 const pool = require('../db');
 const { IsAdmin } = require('../middlewares');
@@ -21,9 +22,13 @@ router.get('/:id', (req, res, next) => {
 
 router.post('/', IsAdmin, (req, res, next) => {
   pool.query(`INSERT INTO places (name, address, latlng, description) VALUES ('${req.body.name}', '${req.body.address}', '${req.body.latlng}', '${req.body.description}')`,
-    function(error, results, fields) {
+    function(error, results) {
       if (error) next(error);
-      res.json({ message: 'Place added successfully' });
+      const code = crypto.randomBytes(15).toString('hex');
+      pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${code}')`, (error, results) => {
+        if (error) next(error);
+        res.json({ message: 'Place added successfully' });
+      });
     }
   );
 });
