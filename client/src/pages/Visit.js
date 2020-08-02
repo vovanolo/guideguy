@@ -1,5 +1,4 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
 import axios from 'axios';
 
 export default class Visit extends React.Component {

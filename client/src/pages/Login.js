@@ -21,12 +21,31 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <div>
-        <form onSubmit={e => this.LoginUser(e)}>
-          <input placeholder="username" onChange={e => this.setState({ username: e.currentTarget.value })} />
-          <input placeholder="password" onChange={e => this.setState({ password: e.currentTarget.value })} />
-          <input type="submit" />
-        </form>
+      <div className="container content-center">
+        <div className="row">
+          <div className="col-md-6 offset-md-3">
+            <h1>Sign In</h1>
+            <form onSubmit={e => this.LoginUser(e)}>
+              <div className="form-group">
+                <input
+                  type="text"
+                  placeholder="username"
+                  className="form-control"
+                  onChange={e => this.setState({ username: e.currentTarget.value })}
+                />
+              </div>
+              <div className="form-group">
+                <input
+                  type="password"
+                  placeholder="password"
+                  className="form-control"
+                  onChange={e => this.setState({ password: e.currentTarget.value })}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">Sign In</button>
+            </form>
+          </div>
+        </div>
       </div>
     )
   }

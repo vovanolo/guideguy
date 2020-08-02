@@ -1,134 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-body{
-    font-family: 'Roboto', sans-serif;
-    background: #524d4d;
-}
-.nav-link{
-    color:white;
-    font-size: 20px;
-    font-weight: 600;
-    margin-left: 20px;
-}
-.nav-link:hover{
-    font-size:24px;
-    color:purple;
-    border-bottom: 1px solid red;
-
-}
-.navbar-brand{
-    color:white;
-    font-size: 2em;
-    font-weight: 800;
-}
-.btn{
-    border:1px solid red;
-    color:white;
-    font-size: 16px;
-    font-weight: 600;
-}
-.btn:hover{
-    font-size:17px;
-    color:purple;
-}
-.video-container {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	overflow: hidden;
-	
-}
-.video-container video {
-	min-width: 100%;
-	min-height: 100%;
-  position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	object-fit: cover;
-}
-nav{
-    z-index: 1;
-    background-color:rgba(255,255,255,0) !important;
-}
-.content-center{
-    text-align: center;
-    top:50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-}
-.content-center h1{
-    font-family: 'Roboto', sans-serif;
-    font-size: 4rem;
-    font-weight: 900;
-    font-style: italic;
-    line-height:1.4em;
-    opacity: 0.7;
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
+    margin-bottom: 8px;
 }
 
-
-.btn-main {
-    line-height: 50px;
-    height: 50px;
-    text-align: center;
-    width: 250px;
-    cursor: pointer;
-}
-div[class*=box] {
-    position: absolute;
-    top:60%;
-    height: 33.33%;
-    width: 100%; 
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.btn-two {
-    color: #FFF;
-    transition: all 0.5s;
-    position: relative; 
-}
-.btn-two span {
-    z-index: 2; 
-    display: block;
-    position: absolute;
+.input-row > * {
     width: 100%;
-    height: 100%;   
 }
-.btn-two::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    transition: all 0.5s;
-    border: 1px solid rgba(255,255,255,0.2);
-    background-color: rgba(255,255,255,0.1);
+
+.input-row > *:first-child {
+    margin-right: 5px;
 }
-.btn-two::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1;
-    transition: all 0.5s;
-    border: 1px solid rgba(255,255,255,0.2);
-    background-color: rgba(255,255,255,0.1);
-}
-.btn-two:hover::before {
-  transform: rotate(-45deg);
-  background-color: rgba(255,255,255,0);
-}
-.btn-two:hover::after {
-  transform: rotate(45deg);
-  background-color: rgba(255,255,255,0);
-}
-li{
-    list-style: none;
+
+.input-row > *:last-child {
+    margin-left: 5px;
 }
