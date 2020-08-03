@@ -16,7 +16,8 @@ export default class Login extends React.Component {
   LoginUser(e) {
     e.preventDefault();
 
-    axios.post('http://localhost:3050/auth/login', this.state).then(res => localStorage.setItem('JWT_TOKEN', res.data));
+    axios.post(`${process.env.REACT_APP_SERVER_HOST}/auth/login`, this.state)
+      .then(res => localStorage.setItem('JWT_TOKEN', res.data));
   }
 
   render() {

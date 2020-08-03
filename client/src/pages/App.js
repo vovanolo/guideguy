@@ -1,16 +1,7 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Button, Typography, Container } from '@material-ui/core';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      serverHost: 'http://localhost:3050'
-    }
-  }
-
+export default class App extends Component {
   render() {
     return (
       <div className="container">
@@ -31,5 +22,3 @@ class App extends React.Component {
     );
   }
 }
-
-export default App;

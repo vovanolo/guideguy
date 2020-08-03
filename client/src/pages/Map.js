@@ -7,9 +7,14 @@ export default class Map extends Component {
     const places = [1, 2, 3, 4, 5];
     return (
       <div className="container">
+        <div className="row mt-3">
+          <div className="col">
+            <h1>Places</h1>
+          </div>
+        </div>
         <div className="row">
-          <div className="col-md-12">
-            <div className="row row-cols-md-3">
+          <div className="col">
+            <div className="row row-cols-md-3 row-cols-1">
               {places.map((place, index) => (
                 <div key={index} className="col mb-4">
                   <Place id={index} />
