@@ -1,14 +1,14 @@
 import React, { Component } from "react";
+import axios from 'axios';
 
 export default class SignUp extends Component {
   constructor(props) {
     super(props);
   
     this.state = {
-      name: '',
       username: '',
       password: '',
-      confirmPassword: '',
+      repeatPassword: '',
     };
 
     this.SignUpUser = this.SignUpUser.bind(this);
@@ -16,6 +16,20 @@ export default class SignUp extends Component {
 
   SignUpUser(e) {
     e.preventDefault();
+
+    const { username, password, repeatPassword } = this.state;
+
+    if (repeatPassword !== password) {
+      alert('Passwords must match');
+      return;
+    }
+    const user = { username, password };
+    axios.post(`${process.env.REACT_APP_SERVER_HOST}/auth/signup`, user)
+      .then(res => {
+        localStorage.setItem('JWT_TOKEN', res.data);
+        this.props.updateJwtToken();
+      })
+      .catch(err => console.log(err));
   }
 
   render() {
@@ -25,16 +39,6 @@ export default class SignUp extends Component {
           <div className="col-md-6 offset-md-3">
             <h1>Sign Up</h1>
             <form onSubmit={(e) => this.SignUpUser(e)}>
-              <div className="form-group">
-                <input
-                  type="text"
-                  placeholder="name"
-                  className="form-control"
-                  onChange={(e) =>
-                    this.setState({ name: e.currentTarget.value })
-                  }
-                />
-              </div>
               <div className="form-group">
                 <input
                   type="text"
@@ -67,9 +71,10 @@ export default class SignUp extends Component {
                   />
                 </div>
               </div>
-              <button type="submit" className="btn btn-primary">
-                Sign Up
-              </button>
+              <input
+                type="submit"
+                className="btn btn-primary"
+                value="Sign Up" />
             </form>
           </div>
         </div>

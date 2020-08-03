@@ -13,14 +13,20 @@ import Visit from './pages/Visit';
 
 import Navbar from './components/Navbar';
 
+const child = React.createRef();
+
+function updateJwtToken() {
+  child.current.updateJwtToken();
+}
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Navbar />
+      <Navbar ref={child} />
       <Route exact path='/' component={App} />
       <Route path='/admin' component={Admin} />
       <Route path='/login' component={Login} />
-      <Route path='/signup' component={SignUp} />
+      <Route path='/signup' component={() => <SignUp updateJwtToken={updateJwtToken} />} />
       <Route path='/map' component={Map} />
       <Route path='/visit/:visitToken' component={Visit} />
     </BrowserRouter>

@@ -6,7 +6,7 @@ const pool = require('../db');
 
 const router = express.Router();
 
-router.post('/signup', (req, res) => {
+router.post('/signup', (req, res, next) => {
   pool.query(`SELECT id FROM users WHERE username='${req.body.username}'`, (error, data) => {
     if (error) next(error);
     if (data.length > 0) {
@@ -16,12 +16,13 @@ router.post('/signup', (req, res) => {
     else {
       // Signup user
       bcrypt.hash(req.body.password, 10, (error, hashedPass) => {
+        if (error) next(error);
         const username = req.body.username;
         const password = hashedPass;
 
-        pool.query(`INSERT INTO users (username, password) VALUES ('${username}', '${password}')`, (error, data) => {
+        pool.query(`INSERT INTO users (username, password) VALUES ('${username}', '${password}')`, (error, results) => {
           if (error) next(error);
-          pool.query(`SELECT id, username, role FROM users WHERE id='${data.insertId}'`, (error, data) => {
+          pool.query(`SELECT id, username, role FROM users WHERE id='${results.insertId}'`, (error, data) => {
             if (error) next(error);
             const payload = JSON.parse(JSON.stringify(data[0]));
             const jwtToken = jwt.sign(payload, process.env.JWT_KEY);

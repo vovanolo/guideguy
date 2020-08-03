@@ -23,7 +23,9 @@ export default class Admin extends Component {
       headers: {
         'Authorization': `Bearer ${localStorage.JWT_TOKEN}`
       }
-    }).then(res => this.setState({places: res.data}))
+    })
+      .then(res => this.setState({places: res.data}))
+      .catch(err => console.log(err));
   }
 
   AddPlace(e) {
@@ -38,8 +40,8 @@ export default class Admin extends Component {
     }).then(res => this.setState({ places: [...this.state.places, res.data] }));
   }
 
-  DeletePlace() {
-    axios.delete(`${process.env.REACT_APP_SERVER_HOST}/places/${this.state.id}`);
+  DeletePlace(id) {
+    axios.delete(`${process.env.REACT_APP_SERVER_HOST}/places/${id}`);
   }
 
   SeedPlaces() {
@@ -115,18 +117,20 @@ export default class Admin extends Component {
             <button
               type="button"
               className="btn btn-secondary mt-3 mb-3"
-              onClick={this.SeedPlaces}>
+              onClick={() => this.SeedPlaces()}>
               Seed places
             </button>
           </div>
           <div className="col-md-8">
             <table className="table">
               <thead>
-                <th scope="col" align="left">Id</th>
-                <th scope="col" align="right">Name</th>
-                <th scope="col" align="right">Address</th>
-                <th scope="col" align="right">LatLng</th>
-                <th scope="col" align="right">Actions</th>
+                <tr>
+                  <th scope="col" align="left">Id</th>
+                  <th scope="col" align="right">Name</th>
+                  <th scope="col" align="right">Address</th>
+                  <th scope="col" align="right">LatLng</th>
+                  <th scope="col" align="right">Actions</th>
+                </tr>
               </thead>
               <tbody>
                 {[{ name: 1, address: 1, lat: 1, lng: 1 },
@@ -149,7 +153,7 @@ export default class Admin extends Component {
                               </Link>
                               <button
                                 className="btn btn-danger"
-                                onClick={this.DeletePlace(place.id)}>
+                                onClick={() => this.DeletePlace(place.id)}>
                                   Delete
                               </button>
                             </div>

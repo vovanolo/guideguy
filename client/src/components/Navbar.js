@@ -2,7 +2,30 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 export default class Navbar extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      jwtToken: '',
+    }
+  }
+
+  updateJwtToken() {
+    const token = localStorage.getItem('JWT_TOKEN');
+    this.setState({ jwtToken: token });
+  }
+
+  logout() {
+    localStorage.removeItem('JWT_TOKEN');
+    this.updateJwtToken();
+  }
+
+  componentDidMount() {
+    this.updateJwtToken();
+  }
+  
   render() {
+    const { jwtToken } = this.state;
     return (
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <Link to="/" className="navbar-brand">
@@ -25,10 +48,9 @@ export default class Navbar extends Component {
           <Link to="/map" className="nav-link">
             Map
           </Link>
-          <Link to="/login" className="nav-link">
-            Sign In
-          </Link>
-          <Link to="/signup" className="nav-link">Sign Up</Link>
+          {!jwtToken && <Link to="/login" className="nav-link">Sign In</Link>}
+          {!jwtToken && <Link to="/signup" className="nav-link">Sign Up</Link>}
+          {jwtToken && <button type="button" className="btn btn-danger" onClick={() => this.logout()}>Log out</button>}
           </ul>
         </div>
       </nav>
