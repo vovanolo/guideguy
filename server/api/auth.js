@@ -26,7 +26,7 @@ router.post('/signup', (req, res, next) => {
             if (error) next(error);
             const payload = JSON.parse(JSON.stringify(data[0]));
             const jwtToken = jwt.sign(payload, process.env.JWT_KEY);
-            res.json(jwtToken);
+            res.json({ token: jwtToken, user: payload });
           });
         });
       });
@@ -52,7 +52,7 @@ router.post('/login', (req, res) => {
             role: data[0].role
           };
           const jwtToken = jwt.sign(user, process.env.JWT_KEY);
-          res.json(jwtToken);
+          res.json({ token: jwtToken, user });
         }
       });
     }
