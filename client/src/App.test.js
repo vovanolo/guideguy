@@ -1,9 +1,15 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App from './App';
+import { BrowserRouter } from 'react-router-dom';
+import Admin from './pages/Admin';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders Admin heading', () => {
+  const adminPage = (
+    <BrowserRouter>
+      <Admin />
+    </BrowserRouter>
+  )
+  const { getByText } = render(adminPage);
+  const hElement = getByText('Admin');
+  expect(hElement).toBeInTheDocument();
 });
