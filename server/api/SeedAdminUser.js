@@ -1,8 +1,9 @@
 const bcrypt = require('bcrypt');
 
+require('dotenv').config();
+
 const pool = require('../db');
 
-require('dotenv').config();
 
 pool.query(`SELECT id FROM users WHERE role='admin' LIMIT 1`, (error, data) => {
   if (error) throw error;
