@@ -45,7 +45,13 @@ export default class Admin extends Component {
   }
 
   SeedPlaces() {
-    axios.post(`${process.env.REACT_APP_SERVER_HOST}/admin/seed/places`, { count: 5 });
+    axios.post(`${process.env.REACT_APP_SERVER_HOST}/seed/places`, {
+      count: 5
+    }, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.JWT_TOKEN}`
+      }
+    });
   }
 
   componentDidMount() {

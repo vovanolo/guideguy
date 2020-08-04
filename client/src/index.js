@@ -25,7 +25,7 @@ ReactDOM.render(
       <Navbar ref={child} />
       <Route exact path='/' component={App} />
       <Route path='/admin' component={Admin} />
-      <Route path='/login' component={Login} />
+      <Route path='/login' component={() => <Login updateJwtToken={updateJwtToken} />} />
       <Route path='/signup' component={() => <SignUp updateJwtToken={updateJwtToken} />} />
       <Route path='/map' component={Map} />
       <Route path='/visit/:visitToken' component={Visit} />
