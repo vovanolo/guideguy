@@ -32,9 +32,9 @@ router.post('/', IsAdmin, (req, res, next) => {
       };
       jwt.sign(payload, process.env.JWT_KEY, (error, token) => {
         if (error) next(error);
-        pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${code}')`, (error, results) => {
+        pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${token}')`, (error, results) => {
           if (error) next(error);
-          res.json({ token });
+          res.json({ placeId: payload.placeId, token });
         });
       });
     }
