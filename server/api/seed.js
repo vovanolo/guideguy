@@ -14,7 +14,7 @@ router.use(IsAdmin);
 router.post('/users', (req, res, next) => {
   const count = req.body.count;
   for (let i = 0; i < count; i++) {
-    pool.query(`INSERT INTO users (username) VALUES ('${faker.internet.userName()}')`, (error, results) => {
+    pool.query(`INSERT INTO users (username) VALUES ('${faker.internet.userName()}')`, (error) => {
       if (error) throwError(res, next, error, 500);
     });
   }

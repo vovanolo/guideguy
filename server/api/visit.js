@@ -31,12 +31,12 @@ router.get('/:visitToken', (req, res, next) => {
             throwError(res, next, 'You have already visited this place', 403);
           }
           else {
-            pool.query(`INSERT INTO visited_places (userId, placeId) VALUES ('${req.user.id}', '${decoded.placeId}')`, (error, results) => {
+            pool.query(`INSERT INTO visited_places (userId, placeId) VALUES ('${req.user.id}', '${decoded.placeId}')`, (error) => {
               if (error) throwError(res, next, error, 500);
               res.json({ message: `User id(${req.user.id}) successfully visited place id(${decoded.placeId})` });
             });
           }
-        })
+        });
       }
     });
   });

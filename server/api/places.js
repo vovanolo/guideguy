@@ -33,7 +33,7 @@ router.post('/', IsAdmin, (req, res, next) => {
       };
       jwt.sign(payload, process.env.JWT_KEY, (error, token) => {
         if (error) throwError(res, next, error, 500);
-        pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${token}')`, (error, results) => {
+        pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${token}')`, (error) => {
           if (error) throwError(res, next, error, 500);
           res.json({ placeId: payload.placeId, token });
         });
@@ -48,7 +48,7 @@ router.patch('/:id', IsAdmin, (req, res, next) => {
       if (error) throwError(res, next, `Error: No place with id ${req.params.id} found`, 404);
     }
     else {
-      pool.query(`UPDATE places SET name='${req.body.name}', address='${req.body.address}', latlng='${req.body.latlng}', description='${req.body.latlng}' WHERE id='${req.params.id}'`, function(error, results) {
+      pool.query(`UPDATE places SET name='${req.body.name}', address='${req.body.address}', latlng='${req.body.latlng}', description='${req.body.latlng}' WHERE id='${req.params.id}'`, function(error) {
         if (error) throwError(res, next, error, 500);
         else {
           res.json({ message: 'Place updated successfully' });
@@ -65,7 +65,7 @@ router.delete('/:id', IsAdmin, (req, res, next) => {
       if (error) throwError(res, next, `Error: No place with id ${req.params.id} found`, 404);
     }
     else {
-      pool.query(`DELETE FROM places WHERE id='${req.params.id}'`, (error, results) => {
+      pool.query(`DELETE FROM places WHERE id='${req.params.id}'`, (error) => {
         if (error) throwError(res, next, error, 500);
         else {
           res.json({ message: 'Place deleted successfully' });

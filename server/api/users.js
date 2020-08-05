@@ -27,7 +27,7 @@ router.post('/', (req, res, next) => {
   bcrypt.hash(req.body.password, 10, (hashError, password) => {
     if (hashError) throwError(res, next, hashError, 500);
     pool.query(`INSERT INTO users (username, password, role) VALUES ('${req.body.username}', '${password}', '${req.body.role}')`,
-      (error, results) => {
+      (error) => {
         if (error) throwError(res, next, error, 500);
         res.json({ message: 'User added successfully' });
       }
@@ -44,7 +44,7 @@ router.patch('/:id', (req, res, next) => {
     else {
       bcrypt.hash(req.body.password, 10, (hashError, password) => {
         if (hashError) throwError(res, next, hashError, 500);
-        pool.query(`UPDATE users SET username='${req.body.username}', password='${password}', role='${req.body.role}' WHERE id='${req.params.id}'`, (error, results) => {
+        pool.query(`UPDATE users SET username='${req.body.username}', password='${password}', role='${req.body.role}' WHERE id='${req.params.id}'`, (error) => {
           if (error) throwError(res, next, error, 500);
           else {
             res.json({ message: 'User updated successfully' });
@@ -61,7 +61,7 @@ router.delete('/:id', (req, res, next) => {
       if (error) throwError(res, next, `Error: No user with id ${req.params.id} found`, 404);
     }
     else {
-      pool.query(`DELETE FROM users WHERE id='${req.params.id}'`, (error, results) => {
+      pool.query(`DELETE FROM users WHERE id='${req.params.id}'`, (error) => {
         if (error) throwError(res, next, error, 500);
         else {
           res.json({ message: 'User deleted successfully' });
