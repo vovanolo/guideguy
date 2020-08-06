@@ -30,7 +30,7 @@ ReactDOM.render(
       <Route path='/signup' component={() => <SignUp updateJwtToken={updateJwtToken} />} />
       <Route path='/map' component={Map} />
       <Route path='/visit/:visitToken' component={Visit} />
-      <Route path='/place' component={Place} />
+      <Route path='/place/:id' component={Place} />
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

@@ -24,7 +24,7 @@ export default class Admin extends Component {
         'Authorization': `Bearer ${localStorage.JWT_TOKEN}`
       }
     })
-      .then(res => this.setState({places: res.data}))
+      .then(res => this.setState({ places: res.data }))
       .catch(err => console.log(err));
   }
 
@@ -64,7 +64,7 @@ export default class Admin extends Component {
   }
 
   componentDidMount() {
-    // this.ViewPlaces();
+    this.ViewPlaces();
   }
 
   render() {
@@ -150,13 +150,13 @@ export default class Admin extends Component {
               <tbody>
                 {this.state.places
                     .reverse().map((place, index) => {
-                      place.id = index;
+                      const [lat, lng] = place.latlng.split(',');
                       return (
                         <tr key={place.id}>
                           <th scope="row" align="left">{place.id}</th>
                           <td align="right">{place.name}</td>
                           <td align="right">{place.address}</td>
-                          <td align="right">{place.lat + ',' + place.lng}</td>
+                          <td align="right">{lat + ',' + lng}</td>
                           <td>
                             <div className="btn-group" role="group">
                               <Link
