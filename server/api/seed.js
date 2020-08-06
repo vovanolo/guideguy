@@ -23,7 +23,7 @@ router.post('/users', (req, res, next) => {
 
 router.post('/places', (req, res, next) => {
   const count = req.body.count;
-  const tokens = [];
+  const places = [];
   for (let i = 0; i < count; i++) {
     pool.query(`INSERT INTO places (name, address, latlng, thumbnail, description) VALUES ('${faker.address.streetName()}', '${faker.address.streetAddress()}', '${faker.address.latitude()},${faker.address.longitude()}', '${faker.image.imageUrl()}', '${faker.lorem.paragraph(10)}')`, (error, results) => {
       if (error) throwError(res, next, error, 500);
@@ -34,18 +34,27 @@ router.post('/places', (req, res, next) => {
       };
       jwt.sign(payload, process.env.JWT_KEY, (error, token) => {
         if (error) throwError(res, next, error, 500);
-        pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${token}')`, (error, results) => {
+        pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${token}')`, (error) => {
           if (error) throwError(res, next, error, 500);
-          const newToken = {
-            placeId: results.insertId,
-            token
-          };
-          tokens.push(newToken);
+          pool.query(`SELECT * FROM places WHERE id='${payload.placeId}'`, (error, results) => {
+            if (error) throw(res, next, error, 500);
+            const newPlace = {
+              ...results[0],
+              token
+            };
+            places.push(newPlace);
+            if (i === count - 1) {
+              sendResponse();
+            }
+          });
         });
       });
     });
   }
-  res.json(tokens);
+
+  function sendResponse() {
+    res.json(places);
+  }
 });
 
 module.exports = router;
