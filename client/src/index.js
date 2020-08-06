@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Map from './pages/Map';
 import Visit from './pages/Visit';
+import Place from './pages/Place';
 
 import Navbar from './components/Navbar';
 
@@ -29,6 +30,7 @@ ReactDOM.render(
       <Route path='/signup' component={() => <SignUp updateJwtToken={updateJwtToken} />} />
       <Route path='/map' component={Map} />
       <Route path='/visit/:visitToken' component={Visit} />
+      <Route path='/place' component={Place} />
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

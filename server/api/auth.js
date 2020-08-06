@@ -38,7 +38,7 @@ router.post('/signup', (req, res, next) => {
 router.post('/login', (req, res, next) => {
   pool.query(`SELECT * FROM users WHERE username='${req.body.username}'`, (error, data) => {
     if (error) throwError(res, next, error, 500);
-    if (data.length <= 0) {
+    if (!data) {
       throwError(res, next, 'Check your login and password', 404);
     }
     else {

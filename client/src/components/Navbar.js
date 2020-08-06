@@ -23,7 +23,7 @@ export default class Navbar extends Component {
   componentDidMount() {
     this.updateJwtToken();
   }
-  
+
   render() {
     const { jwtToken } = this.state;
     return (
@@ -42,15 +42,15 @@ export default class Navbar extends Component {
         >
           <span className="navbar-toggler-icon"></span>
         </button>
-        
+
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           <ul className="navbar-nav ml-auto">
-          <Link to="/map" className="nav-link">
-            Map
+            <Link to="/map" className="nav-link">
+              Map
           </Link>
-          {!jwtToken && <Link to="/login" className="nav-link">Sign In</Link>}
-          {!jwtToken && <Link to="/signup" className="nav-link">Sign Up</Link>}
-          {jwtToken && <button type="button" className="btn btn-danger" onClick={() => this.logout()}>Log out</button>}
+            {!jwtToken && <Link to="/login" className="nav-link">Sign In</Link>}
+            {!jwtToken && <Link to="/signup" className="nav-link">Sign Up</Link>}
+            {jwtToken && <button type="button" className="btn btn-danger" onClick={() => this.logout()}>Log out</button>}
           </ul>
         </div>
       </nav>
