@@ -1,6 +1,6 @@
 function throwError(res, next, error, statusCode) {
     const newError = new Error(error);
-    res.status(statusCode);
+    // res.status(statusCode);
     next(newError);
 }
 
