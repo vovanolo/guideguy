@@ -10,6 +10,7 @@ import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import Map from './pages/Map';
 import Visit from './pages/Visit';
+import Place from './pages/Place';
 
 import Navbar from './components/Navbar';
 
@@ -20,20 +21,17 @@ function updateJwtToken() {
 }
 
 ReactDOM.render(
-  // <React.StrictMode>
-  //   <BrowserRouter>
-  //     <Navbar ref={child} />
-  //     <Route exact path='/' component={App} />
-  //     <Route path='/admin' component={Admin} />
-  //     <Route path='/login' component={() => <Login updateJwtToken={updateJwtToken} />} />
-  //     <Route path='/signup' component={() => <SignUp updateJwtToken={updateJwtToken} />} />
-  //     <Route path='/map' component={Map} />
-  //     <Route path='/visit/:visitToken' component={Visit} />
-  //   </BrowserRouter>
-  // </React.StrictMode>,
-  <div>
-    <div>test</div>
-    <div>test1</div>
-  </div>,
+  <React.StrictMode>
+    <BrowserRouter>
+      <Navbar ref={child} />
+      <Route exact path='/' component={App} />
+      <Route path='/admin' component={Admin} />
+      <Route path='/login' component={() => <Login updateJwtToken={updateJwtToken} />} />
+      <Route path='/signup' component={() => <SignUp updateJwtToken={updateJwtToken} />} />
+      <Route path='/map' component={Map} />
+      <Route path='/visit/:visitToken' component={Visit} />
+      <Route path='/place' component={Place} />
+    </BrowserRouter>
+  </React.StrictMode>,
   document.getElementById('root')
 );
