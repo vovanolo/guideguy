@@ -8,11 +8,17 @@ import App from './pages/App';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
 import Visit from './pages/Visit';
+import Place from './pages/Place';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Switch>
+      <Route exact path='/' component={App} />
+      <Route path='/admin' component={Admin} />
+      <Route path='/login' component={Login} />
+      <Route path='/visit/:visitToken' component={Visit} />
+      <Route path='/place' component={Place} />
+      {/* <Switch>
         <Route exact path='/'>
           <App />
         </Route>
@@ -23,7 +29,7 @@ ReactDOM.render(
           <Login />
         </Route>
         <Route path='/visit/:visitToken' component={Visit} />
-      </Switch>
+      </Switch> */}
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
