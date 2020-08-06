@@ -10,6 +10,7 @@ const seed = require('./api/seed');
 const auth = require('./api/auth');
 const users = require('./api/users');
 const visit = require('./api/visit');
+const challenges = require('./api/challenges');
 const { notFound, errorHandler } = require('./middlewares');
 
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use('/seed', seed);
 app.use('/auth', auth);
 app.use('/users', users);
 app.use('/visit', visit);
+app.use('/challenges', challenges);
 
 app.use(notFound);
 app.use(errorHandler);
