@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 
 const pool = require('../db');
 const { IsAdmin } = require('../middlewares');
+const { throwError } = require('../functions');
 
 const router = express.Router();
 
@@ -13,33 +14,38 @@ router.use(IsAdmin);
 router.post('/users', (req, res, next) => {
   const count = req.body.count;
   for (let i = 0; i < count; i++) {
-    pool.query(`INSERT INTO users (username) VALUES ('${faker.internet.userName()}')`, (error, results) => {
-      if (error) next(error);
+    pool.query(`INSERT INTO users (username) VALUES ('${faker.internet.userName()}')`, (error) => {
+      if (error) throwError(res, next, error, 500);
     });
   }
-  res.json({message: 'Users created successfully'});
+  res.json({ message: 'Users created successfully' });
 });
 
 router.post('/places', (req, res, next) => {
   const count = req.body.count;
+  const tokens = [];
   for (let i = 0; i < count; i++) {
     pool.query(`INSERT INTO places (name, address, latlng, thumbnail, description) VALUES ('${faker.address.streetName()}', '${faker.address.streetAddress()}', '${faker.address.latitude()},${faker.address.longitude()}', '${faker.image.imageUrl()}', '${faker.lorem.paragraph(10)}')`, (error, results) => {
-      if (error) throw(error);
+      if (error) throwError(res, next, error, 500);
       const code = crypto.randomBytes(15).toString('hex');
       const payload = {
         placeId: results.insertId,
         code: code
       };
       jwt.sign(payload, process.env.JWT_KEY, (error, token) => {
-        if (error) next(error);
-        pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${code}')`, (error, results) => {
-          if (error) throw(error);
-          console.log(`PlaceId: ${results.insertId}\nToken: ${token}`);
+        if (error) throwError(res, next, error, 500);
+        pool.query(`INSERT INTO codes (placeId, code) VALUES ('${results.insertId}', '${token}')`, (error, results) => {
+          if (error) throwError(res, next, error, 500);
+          const newToken = {
+            placeId: results.insertId,
+            token
+          };
+          tokens.push(newToken);
         });
       });
     });
   }
-  res.json({ message: 'Places added successfully' });
+  res.json(tokens);
 });
 
 module.exports = router;

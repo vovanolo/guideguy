@@ -3,10 +3,11 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const pool = require('../db');
+const { throwError } = require('../functions');
 
 const router = express.Router();
 
-router.post('/signup', (req, res) => {
+router.post('/signup', (req, res, next) => {
   pool.query(`SELECT id FROM users WHERE username='${req.body.username}'`, (error, data) => {
     if (error) next(error);
     if (data.length > 0) {
@@ -16,16 +17,17 @@ router.post('/signup', (req, res) => {
     else {
       // Signup user
       bcrypt.hash(req.body.password, 10, (error, hashedPass) => {
+        if (error) throwError(res, next, error, 500);
         const username = req.body.username;
         const password = hashedPass;
 
-        pool.query(`INSERT INTO users (username, password) VALUES ('${username}', '${password}')`, (error, data) => {
-          if (error) next(error);
-          pool.query(`SELECT id, username, role FROM users WHERE id='${data.insertId}'`, (error, data) => {
-            if (error) next(error);
+        pool.query(`INSERT INTO users (username, password) VALUES ('${username}', '${password}')`, (error, results) => {
+          if (error) throwError(res, next, error, 500);
+          pool.query(`SELECT id, username, role FROM users WHERE id='${results.insertId}'`, (error, data) => {
+            if (error) throwError(res, next, error, 500);
             const payload = JSON.parse(JSON.stringify(data[0]));
             const jwtToken = jwt.sign(payload, process.env.JWT_KEY);
-            res.json(jwtToken);
+            res.json({ token: jwtToken, user: payload });
           });
         });
       });
@@ -33,17 +35,17 @@ router.post('/signup', (req, res) => {
   });
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', (req, res, next) => {
   pool.query(`SELECT * FROM users WHERE username='${req.body.username}'`, (error, data) => {
-    if (error) next(error);
-    if (data.length <= 0) {
-      res.status(404);
-      next('Check your login and password');
+    if (error) throwError(res, next, error, 500);
+    if (!data) {
+      throwError(res, next, 'Check your login and password', 404);
     }
     else {
       const password = req.body.password;
       const hash = data[0].password;
       bcrypt.compare(password, hash, function(err, result) {
+        if (err) throwError(res, next, err, 500);
         if (result) {
           const user = {
             id: data[0].id,
@@ -51,7 +53,7 @@ router.post('/login', (req, res) => {
             role: data[0].role
           };
           const jwtToken = jwt.sign(user, process.env.JWT_KEY);
-          res.json(jwtToken);
+          res.json({ token: jwtToken, user });
         }
       });
     }
