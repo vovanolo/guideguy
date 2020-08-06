@@ -78,4 +78,18 @@ router.delete('/:id', IsAdmin, (req, res, next) => {
   });
 });
 
+router.get('/code/:id', IsAdmin, (req, res, next) => {
+  pool.query(`SELECT code FROM codes WHERE placeId=${req.params.id}`, (error, results) => {
+    if (error) throwError(res, next, error, 500);
+    if (results) {
+      if (results.length <= 0) {
+        throwError(res, next, 'No place found', 404);
+      }
+      else {
+        res.json({ token: results[0] });
+      }
+    }
+  });
+});
+
 module.exports = router;

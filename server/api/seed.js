@@ -26,8 +26,7 @@ router.post('/places', (req, res, next) => {
   const places = [];
   for (let i = 0; i < count; i++) {
     pool.query(`INSERT INTO places (name, address, latlng, thumbnail, description) VALUES ('${faker.address.streetName()}', '${faker.address.streetAddress()}', '${faker.address.latitude()},${faker.address.longitude()}', '${faker.image.imageUrl()}', '${faker.lorem.paragraph(10)}')`, (error, results) => {
-      // if (error) throwError(res, next, error, 500);
-      console.log(error);
+      if (error) throwError(res, next, error, 500);
       const code = crypto.randomBytes(15).toString('hex');
       const payload = {
         placeId: results.insertId,

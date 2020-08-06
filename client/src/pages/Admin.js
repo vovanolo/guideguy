@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import qr from 'qrcode';
 
 export default class Admin extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      qrUrl: '',
       id: '',
       name: '',
       address: '',
@@ -58,9 +60,23 @@ export default class Admin extends Component {
       headers: {
         'Authorization': `Bearer ${localStorage.JWT_TOKEN}`
       }
-      
     })
+    .then(res => this.setState({ places: this.state.places.concat(res.data) }))
     .catch(err => console.log(err.message));
+  }
+
+  generateQrCode(id) {
+    axios.get(`${process.env.REACT_APP_SERVER_HOST}/places/code/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.JWT_TOKEN}`
+      }
+    }).then(res => {
+      const token = res.data.token.code;
+      const url = `${process.env.REACT_APP_SERVER_HOST}/visit/${token}`;
+      qr.toString(url).then(res => {
+        this.setState({ qrUrl: res });
+      }).catch(error => console.log(error));
+    }).catch(error => console.log(error));
   }
 
   componentDidMount() {
@@ -135,6 +151,8 @@ export default class Admin extends Component {
               onClick={() => this.SeedPlaces()}>
               Seed places
             </button>
+
+            <div dangerouslySetInnerHTML={{ __html: this.state.qrUrl }} />
           </div>
           <div className="col-md-8">
             <table className="table">
@@ -149,29 +167,34 @@ export default class Admin extends Component {
               </thead>
               <tbody>
                 {this.state.places
-                    .reverse().map((place, index) => {
-                      const [lat, lng] = place.latlng.split(',');
-                      return (
-                        <tr key={place.id}>
-                          <th scope="row" align="left">{place.id}</th>
-                          <td align="right">{place.name}</td>
-                          <td align="right">{place.address}</td>
-                          <td align="right">{lat + ',' + lng}</td>
-                          <td>
-                            <div className="btn-group" role="group">
-                              <Link
-                                to={`/place/${place.id}`}
-                                className="btn btn-primary">
-                                  View
-                              </Link>
-                              <button
-                                className="btn btn-danger"
-                                onClick={() => this.DeletePlace(place.id)}>
-                                  Delete
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
+                  .reverse().map((place, index) => {
+                    const [lat, lng] = place.latlng.split(',');
+                    return (
+                      <tr key={place.id}>
+                        <th scope="row" align="left">{place.id}</th>
+                        <td align="right">{place.name}</td>
+                        <td align="right">{place.address}</td>
+                        <td align="right">{lat + ',' + lng}</td>
+                        <td>
+                          <div className="btn-group" role="group">
+                            <Link
+                              to={`/place/${place.id}`}
+                              className="btn btn-primary">
+                                View
+                            </Link>
+                            <button
+                              className="btn btn-danger"
+                              onClick={() => this.DeletePlace(place.id)}>
+                                Delete
+                            </button>
+                            <button
+                              className="btn btn-secondary"
+                              onClick={() => this.generateQrCode(place.id)}>
+                                Generate QR code
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
                 )})}
               </tbody>
             </table>
