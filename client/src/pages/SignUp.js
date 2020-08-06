@@ -26,7 +26,7 @@ export default class SignUp extends Component {
     const user = { username, password };
     axios.post(`${process.env.REACT_APP_SERVER_HOST}/auth/signup`, user)
       .then(res => {
-        localStorage.setItem('JWT_TOKEN', res.data);
+        localStorage.setItem('JWT_TOKEN', res.data.token);
         this.props.updateJwtToken();
       })
       .catch(err => console.log(err));

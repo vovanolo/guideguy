@@ -1,5 +1,7 @@
 function throwError(res, next, error, statusCode) {
-    next(error);
+  const newError = new Error(error);
+  res.status(statusCode);
+  next(newError);
 }
 
 module.exports = { throwError };

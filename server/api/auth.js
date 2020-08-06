@@ -42,20 +42,25 @@ router.post('/login', (req, res, next) => {
       throwError(res, next, 'Check your login and password', 404);
     }
     else {
-      const password = req.body.password;
-      const hash = data[0].password;
-      bcrypt.compare(password, hash, function(err, result) {
-        if (err) throwError(res, next, err, 500);
-        if (result) {
-          const user = {
-            id: data[0].id,
-            username: data[0].username,
-            role: data[0].role
-          };
-          const jwtToken = jwt.sign(user, process.env.JWT_KEY);
-          res.json({ token: jwtToken, user });
-        }
-      });
+      if (data.length <= 0) {
+        throwError(res, next, 'Check your login and password', 404);
+      }
+      else {
+        const password = req.body.password;
+        const hash = data[0].password;
+        bcrypt.compare(password, hash, function(err, result) {
+          if (err) throwError(res, next, err, 500);
+          if (result) {
+            const user = {
+              id: data[0].id,
+              username: data[0].username,
+              role: data[0].role
+            };
+            const jwtToken = jwt.sign(user, process.env.JWT_KEY);
+            res.json({ token: jwtToken, user });
+          }
+        });
+      }
     }
   });
 });
