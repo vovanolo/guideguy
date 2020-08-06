@@ -31,12 +31,19 @@ export default class Admin extends Component {
   AddPlace(e) {
     e.preventDefault();
     const latlng = this.state.lat + ',' + this.state.lng;
-    axios.post(`${process.env.REACT_APP_SERVER_HOST}/places`, {
-      name: this.state.name,
-      address: this.state.address,
-      latlng: latlng,
-      description: this.state.description,
-      imageUrl: this.state.imageUrl,
+    axios( {
+      method: "POST",
+      url: `${process.env.REACT_APP_SERVER_HOST}/places`,
+      data: {
+        name: this.state.name,
+        address: this.state.address,
+        latlng: latlng,
+        description: this.state.description,
+        imageUrl: this.state.imageUrl,
+      },
+      headers: {
+        'Authorization': `Bearer ${localStorage.JWT_TOKEN}`
+      }
     }).then(res => this.setState({ places: [...this.state.places, res.data] }));
   }
 
@@ -51,11 +58,13 @@ export default class Admin extends Component {
       headers: {
         'Authorization': `Bearer ${localStorage.JWT_TOKEN}`
       }
-    });
+      
+    })
+    .catch(err => console.log(err.message));
   }
 
   componentDidMount() {
-    this.ViewPlaces();
+    // this.ViewPlaces();
   }
 
   render() {
@@ -139,9 +148,7 @@ export default class Admin extends Component {
                 </tr>
               </thead>
               <tbody>
-                {[{ name: 1, address: 1, lat: 1, lng: 1 },
-                  { name: 2, address: 2, lat: 2, lng: 2 },
-                  { name: 3, address: 3, lat: 3, lng: 3 }]
+                {this.state.places
                     .reverse().map((place, index) => {
                       place.id = index;
                       return (
