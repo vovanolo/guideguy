@@ -54,7 +54,32 @@ router.post('/:visitToken', (req, res, next) => {
           else {
             pool.query(`INSERT INTO visited_places (userId, placeId) VALUES ('${req.user.id}', '${decoded.placeId}')`, (error) => {
               if (error) throwError(res, next, error, 500);
-              res.json({ message: `User id(${req.user.id}) successfully visited place id(${decoded.placeId})` });
+              pool.query(`SELECT challenge_id FROM challenges_places WHERE place_id='${decoded.placeId}'`, (error, challengeId) => {
+                if (error) throwError(res, next, error, 500);
+                pool.query(`SELECT place_id FROM challenges_places WHERE challenge_id='${challengeId[0].challenge_id}'`, (error, placeIds, fields) => {
+                  if (error) throwError(res, next, error, 500);
+                  let placesCount = 0;
+                  placeIds.forEach((placeId, index) => {
+                    pool.query(`SELECT * FROM visited_places WHERE placeId='${placeId.place_id}' AND userId='${req.user.id}'`, (error, places) => {
+                      if (error) throwError(res, next, error, 500);
+                      if (places.length > 0) {
+                        placesCount++;
+                      }
+                      if (placesCount >= placeIds.length) {
+                        pool.query(`INSERT INTO users_finished_challenges (user_id, challenge_id) VALUES ('${req.user.id}', '${challengeId[0].challenge_id}')`, (error, results) => {
+                          if (error) throwError(res, next, error, 500);
+                          res.json({ message: 'User successfully finished challenge #' + challengeId[0].challenge_id });
+                          pool.end();
+                        });
+                      }
+                      else if (index === placeIds.length - 1) {
+                        res.json({ message: `User id(${req.user.id}) successfully visited place id(${decoded.placeId})` });
+                        pool.end();
+                      }
+                    });
+                  });
+                });
+              });
             });
           }
         });
