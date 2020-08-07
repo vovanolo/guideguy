@@ -12,7 +12,7 @@ router.get('/', (req, res, next) => {
   pool.query('SELECT * FROM places', function(error, results) {
     if (error) throwError(res, next, error, 500);
     if (results.length <= 0) {
-      throwError(req, next, 'No places found in db', 400);
+      throwError(res, next, 'No places found in db', 400);
     }
     res.json(results);
   });
