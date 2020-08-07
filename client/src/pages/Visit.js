@@ -13,7 +13,7 @@ export default class Visit extends React.Component {
   componentDidMount() {
     const visitToken = this.props.match.params.visitToken;
     axios
-      .get(`${process.env.REACT_APP_SERVER_HOST}/visit/${visitToken}`, {
+      .post(`${process.env.REACT_APP_SERVER_HOST}/visit/${visitToken}`, {
         headers: {
           Authorization:
             "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTU5NjI4MTQxNn0.qMuzjug-355aOKyQPQB77eOYYdiZniRB3KCrKVzIUrk",

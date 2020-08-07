@@ -9,17 +9,38 @@ const router = express.Router();
 
 router.use(IsLoggedIn);
 
-router.get('/', (req, res, next) => {
-  pool.query('SELECT * FROM visited_places', (error, results) => {
-    if (error) throwError(res, next, error, 500);
-    res.json(results);
-  });
+router.post('/', (req, res, next) => {
+  const { userId, placeId } = req.body;
+  if (userId && placeId) {
+    pool.query(`SELECT * FROM visited_places WHERE userId='${userId}' AND placeId='${placeId}'`, (error, results) => {
+      if (error) throwError(res, next, error, 500);
+      res.json(results);
+    });
+  }
+  else if (userId) {
+    pool.query(`SELECT * FROM visited_places WHERE userId='${userId}'`, (error, results) => {
+      if (error) throwError(res, next, error, 500);
+      res.json(results);
+    });
+  }
+  else if (placeId) {
+    pool.query(`SELECT * FROM visited_places WHERE placeId='${placeId}'`, (error, results) => {
+      if (error) throwError(res, next, error, 500);
+      res.json(results);
+    });
+  }
+  else {
+    pool.query('SELECT * FROM visited_places', (error, results) => {
+      if (error) throwError(res, next, error, 500);
+      res.json(results);
+    });
+  }
 });
 
-router.get('/:visitToken', (req, res, next) => {
+router.post('/:visitToken', (req, res, next) => {
   jwt.verify(req.params.visitToken, process.env.JWT_KEY, (error, decoded) => {
     if (error) throwError(res, next, error, 500);
-    pool.query(`SELECT id FROM codes WHERE code='${decoded.code}' AND placeId='${decoded.placeId}' LIMIT 1`, (error, results) => {
+    pool.query(`SELECT id FROM codes WHERE placeId='${decoded.placeId}' LIMIT 1`, (error, results) => {
       if (error) throwError(res, next, error, 500);
       if (results.length <= 0) {
         throwError(res, next, 'Invalid data', 403);
