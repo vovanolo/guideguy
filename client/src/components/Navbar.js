@@ -47,10 +47,14 @@ export default class Navbar extends Component {
           <ul className="navbar-nav ml-auto">
             <Link to="/map" className="nav-link">
               Map
-          </Link>
+            </Link>
+            <Link to="/challenges" className="nav-link">
+              Challenges
+            </Link>
             {!jwtToken && <Link to="/login" className="nav-link">Sign In</Link>}
             {!jwtToken && <Link to="/signup" className="nav-link">Sign Up</Link>}
             {jwtToken && <button type="button" className="btn btn-danger" onClick={() => this.logout()}>Log out</button>}
+            {jwtToken && <Link to="/profile" className="btn btn-primary">My Profile</Link>}
           </ul>
         </div>
       </nav>

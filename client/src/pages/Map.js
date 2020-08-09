@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
+import PlaceCard from '../components/PlaceCard';
+import ChallengeCard from "../components/ChallengeCard";
+
 export default class Map extends Component {
   constructor(props) {
     super(props);
@@ -36,21 +39,14 @@ export default class Map extends Component {
               {this.state.places.reverse().map((place, index) => {
                 const excerpt = place.description.substring(0, 179) + '...';
                 return (
-                  <div key={index} className="col mb-4">
-                    <div className="card">
-                    <img
-                      className="card-img-top"
-                      src={place.thumbnail}
-                      alt={place.name}
-                    />
-                      <div className="card-body">
-                        <h5 className="card-title">{place.name}</h5>
-                        <h6 className="card-subtitle mb-2 text-muted">{place.address}</h6>
-                        <p className="card-text">{excerpt}</p>
-                        <Link to={'/place/' + place.id} className="btn btn-primary">View</Link>
-                      </div>
-                    </div>
-                </div>
+                  <PlaceCard
+                    key={place.id}
+                    id={place.id}
+                    thumbnail={place.thumbnail}
+                    name={place.name}
+                    address={place.address}
+                    excerpt={excerpt}
+                  />
                 );
               })}
             </div>

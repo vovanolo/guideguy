@@ -20,7 +20,16 @@ router.post('/', (req, res, next) => {
   else if (userId) {
     pool.query(`SELECT * FROM visited_places WHERE userId='${userId}'`, (error, results) => {
       if (error) throwError(res, next, error, 500);
-      res.json(results);
+      const places = [];
+      results.forEach(({ placeId }, index) => {
+        pool.query(`SELECT * FROM places WHERE id='${placeId}'`, (error, place) => {
+          if (error) throwError(res, next, error, 500);
+          places.push(place[0]);
+          if (index === results.length - 1) {
+            res.json(places);
+          }
+        });
+      });
     });
   }
   else if (placeId) {
@@ -56,7 +65,7 @@ router.post('/:visitToken', (req, res, next) => {
               if (error) throwError(res, next, error, 500);
               pool.query(`SELECT challenge_id FROM challenges_places WHERE place_id='${decoded.placeId}'`, (error, challengeId) => {
                 if (error) throwError(res, next, error, 500);
-                pool.query(`SELECT place_id FROM challenges_places WHERE challenge_id='${challengeId[0].challenge_id}'`, (error, placeIds, fields) => {
+                pool.query(`SELECT place_id FROM challenges_places WHERE challenge_id='${challengeId[0].challenge_id}'`, (error, placeIds) => {
                   if (error) throwError(res, next, error, 500);
                   let placesCount = 0;
                   placeIds.forEach((placeId, index) => {

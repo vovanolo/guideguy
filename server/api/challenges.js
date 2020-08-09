@@ -7,41 +7,49 @@ const { throwError } = require('../functions');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-  // Get challenges
-  pool.query('SELECT * FROM challenges', (error, challenges) => {
-    if (error) throwError(res, next, error, 500);
-    let challenges1 = challenges.map((thing) => ({ challenge: thing, places: [] }));
-    const response = [];
-    challenges.forEach((challenge, index) => {
-      const item = {
-        challenge,
-        places: [],
-      };
-      // Get connections
-      pool.query(`SELECT * FROM challenges_places WHERE challenge_id='${challenge.id}'`, (error, info) => {
-        if (error) throwError(res, next, error, 500);
-        const placesCache = [];
-        info.forEach((el, index) => {
-          // Get places
-          pool.query(`SELECT * FROM places WHERE id='${el.place_id}'`, (error, place) => {
-            if (error) throwError(res, next, error, 500);
-            placesCache.push(place[0]);
-            challenges1 = challenges1.map((el1) => el1.challenge.id !== challenge.id ? el1 : { challenge: el1.challenge, places: [...el1.places, place[0]] });
-            if (index === challenges.length - 1) {
-              item.places = placesCache;
-              response.push(item);
-              console.log(el.place_id.toString());
-            }
+  if (req.body.placeId) {
+    pool.query(`SELECT challenge_id FROM challenges_places WHERE place_id='${req.body.placeId}'`, (error, results) => {
+      if (error) throwError(res, next, error, 500);
+      res.json(results);
+    });
+  }
+  else {
+    // Get challenges
+    pool.query('SELECT * FROM challenges', (error, challenges) => {
+      if (error) throwError(res, next, error, 500);
+      let challenges1 = challenges.map((thing) => ({ challenge: thing, places: [] }));
+      const response = [];
+      challenges.forEach((challenge, index) => {
+        const item = {
+          challenge,
+          places: [],
+        };
+        // Get connections
+        pool.query(`SELECT * FROM challenges_places WHERE challenge_id='${challenge.id}'`, (error, info) => {
+          if (error) throwError(res, next, error, 500);
+          const placesCache = [];
+          info.forEach((el, index) => {
+            // Get places
+            pool.query(`SELECT * FROM places WHERE id='${el.place_id}'`, (error, place) => {
+              if (error) throwError(res, next, error, 500);
+              placesCache.push(place[0]);
+              challenges1 = challenges1.map((el1) => el1.challenge.id !== challenge.id ? el1 : { challenge: el1.challenge, places: [...el1.places, place[0]] });
+              if (index === challenges.length - 1) {
+                item.places = placesCache;
+                response.push(item);
+                console.log(el.place_id.toString());
+              }
+            });
           });
         });
+        if (index === challenges.length - 1) {
+          setTimeout(() => {
+            res.json(challenges1);
+          }, 3000);
+        }
       });
-      if (index === challenges.length - 1) {
-        setTimeout(() => {
-          res.json(challenges1);
-        }, 3000);
-      }
     });
-  });
+  }
 });
 
 router.get('/:id', IsLoggedIn, (req, res, next) => {
@@ -56,11 +64,10 @@ router.get('/:id', IsLoggedIn, (req, res, next) => {
       if (error) throwError(res, next, error, 500);
       if (info.length > 1) {
         info.forEach((placeId, index) => {
-          pool.query(`SELECT * FROM visited_places WHERE userId='${req.user.id}' AND placeId='${placeId.place_id}'`, (error, places) => {
+          pool.query(`SELECT * FROM places WHERE id='${placeId.place_id}'`, (error, places) => {
             if (error) throwError(res, next, error, 500);
             if (places != undefined) {
               if (places[0] != undefined) {
-                console.log(JSON.parse(JSON.stringify(places)));
                 item.places.push(places[0]);
               }
             }

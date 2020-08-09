@@ -2,12 +2,12 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 
 const pool = require('../db');
-const { IsAdmin } = require('../middlewares');
+const { IsAdmin, IsLoggedIn } = require('../middlewares');
 const { throwError } = require('../functions');
 
 const router = express.Router();
 
-router.use(IsAdmin);
+router.use(IsLoggedIn);
 
 router.get('/', (req, res, next) => {
   pool.query('SELECT * FROM users', (error, results) => {
@@ -22,6 +22,8 @@ router.get('/:id', (req, res, next) => {
     res.json(results[0]);
   });
 });
+
+router.use(IsAdmin);
 
 router.post('/', (req, res, next) => {
   bcrypt.hash(req.body.password, 10, (hashError, password) => {
