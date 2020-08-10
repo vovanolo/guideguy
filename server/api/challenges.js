@@ -1,4 +1,5 @@
 const express = require('express');
+const faker = require('faker');
 
 const pool = require('../db');
 const { IsAdmin, IsLoggedIn } = require('../middlewares');
@@ -83,10 +84,26 @@ router.get('/:id', IsLoggedIn, (req, res, next) => {
   });
 });
 
-router.post('/', IsAdmin, (req, res, next) => {
-  pool.query(`INSERT INTO challenges (title, description) VALUES ('${req.body.title}', '${req.body.description}')`, (error) => {
+router.post('/', IsLoggedIn, (req, res, next) => {
+  pool.query(`INSERT INTO challenges (title, description) VALUES ('${faker.name.title()}', '${faker.lorem.paragraphs()}')`, (error, newChallenge) => {
     if (error) throwError(res, next, error, 500);
-    res.json({ message: 'Success' });
+    pool.query('SELECT id FROM places', (error, places) => {
+      if (error) throwError(res, next, error, 500);
+      let filteredPlaces = places;
+      pool.query(`SELECT placeId from visited_places WHERE userId='${req.user.id}'`, (error, visitedPlaces) => {
+        if (error) throwError(res, next, error, 500);
+        visitedPlaces.forEach((visitedPlace) => {
+          filteredPlaces = filteredPlaces.filter((place) => place.id !== visitedPlace.placeId);
+        });
+        for (let i = 0; i < 5; i++) {
+          const randomPlace = Math.floor(Math.random() * filteredPlaces.length);
+          pool.query(`INSERT INTO challenges_places (challenge_id, place_id) VALUES ('${newChallenge.insertId}', '${filteredPlaces[randomPlace].id}')`, (error) => {
+            if (error) throwError(res, next, error, 500);
+          });
+        }
+        setTimeout(() => res.json({ message: 'Success' }), 3000);
+      });
+    });
   }
   );
 });
