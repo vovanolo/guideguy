@@ -88,7 +88,10 @@ export default class Admin extends Component {
       <div className="container">
         <div className="row">
           <div className="col">
-            <h2 className="mt-3">Admin</h2>
+            <div className="row justify-content-between">
+              <h2 className="mt-3">Admin</h2>
+              <Link to="/admin/challanges" className="btn btn-primary">Challenges</Link>
+            </div>
           </div>
         </div>
         <div className="row">

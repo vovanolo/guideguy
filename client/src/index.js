@@ -14,7 +14,7 @@ import Place from './pages/Place';
 import Visit from './pages/Visit';
 import Challenges from './pages/Challenges';
 import Challenge from './pages/Challenge';
-
+import AdminChallange from './pages/AdminChallenge';
 import Navbar from './components/Navbar';
 
 const child = React.createRef();
@@ -29,6 +29,7 @@ ReactDOM.render(
       <Navbar ref={child} />
       <Route exact path='/' component={App} />
       <Route path='/admin' component={Admin} />
+      <Route path='/admin/challanges' component={AdminChallange}></Route>
       <Route path='/profile' component={Profile} />
       <Route path='/login' component={() => <Login updateJwtToken={updateJwtToken} />} />
       <Route path='/signup' component={() => <SignUp updateJwtToken={updateJwtToken} />} />
