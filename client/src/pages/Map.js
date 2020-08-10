@@ -37,7 +37,10 @@ export default class Map extends Component {
           <div className="col">
             <div className="row row-cols-md-3 row-cols-1">
               {this.state.places.reverse().map((place, index) => {
-                const excerpt = place.description.substring(0, 179) + '...';
+                const excerpt = place.description.length > 179 ?
+                  place.description.substring(0, 179) + '...' :
+                  place.description;
+                
                 return (
                   <PlaceCard
                     key={place.id}

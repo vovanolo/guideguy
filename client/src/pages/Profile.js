@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 export default class Profile extends Component {
   constructor(props) {
@@ -64,19 +65,31 @@ export default class Profile extends Component {
         <div className="row">
           <div className="col-md-6 col">
             <h1>Visited places</h1>
-            <ul>
+            <div className="list-group">
               {this.state.places.map((place) => (
-                <li key={place.id}>{place.name}</li>
+                <Link
+                  to={`/place/${place.id}`}
+                  key={place.id}
+                  className="list-group-item list-group-item-action"
+                >
+                  {place.name}
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
           <div className="col-md-6 col">
             <h1>Joined challenges</h1>
-            <ul>
+            <div className="list-group">
               {this.state.challenges.map(({ challenge }) => (
-                <li key={challenge.id}>{challenge.title}</li>
+                <Link
+                  to={`/challenge/${challenge.id}`}
+                  key={challenge.id}
+                  className="list-group-item list-group-item-action"
+                >
+                  {challenge.title}
+                </Link>
               ))}
-            </ul>
+            </div>
           </div>
         </div>
       </div>

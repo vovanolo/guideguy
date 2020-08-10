@@ -7,7 +7,7 @@ export default class Challenges extends Component {
     super(props);
 
     this.state = {
-      challenges: [{ id: 1, title: 'Challenge #1', description: 'Some test description for challenge #1' }]
+      challenges: [{ id: 3, title: 'Challenge #3', description: 'Some test description for challenge #3' }]
     };
   }
 
@@ -23,7 +23,10 @@ export default class Challenges extends Component {
           <div className="col">
             <div className="row row-cols-md-3 row-cols-1">
               {this.state.challenges.reverse().map((challenge, index) => {
-                const excerpt = challenge.description.substring(0, 179) + '...';
+                const excerpt = challenge.description.length > 179 ?
+                  challenge.description.substring(0, 179) + '...' :
+                  challenge.description;
+                
                 return (
                   <ChallengeCard
                     key={index}
