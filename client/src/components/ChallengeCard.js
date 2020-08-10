@@ -8,7 +8,7 @@ export default class ChallengeCard extends Component {
   }
   
   render() {
-    const { title, excerpt } = this.props;
+    const { title, excerpt, completed } = this.props;
 
     return (
       <div className="col mb-4">
@@ -16,6 +16,7 @@ export default class ChallengeCard extends Component {
           <div className="card-body">
             <h5 className="card-title">{title}</h5>
             <p className="card-text">{excerpt}</p>
+            <p>Completed: {completed.toString()}</p>
             <Link to={'/challenge/' + this.props.id} className="btn btn-primary">View</Link>
           </div>
         </div>
