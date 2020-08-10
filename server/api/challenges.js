@@ -14,7 +14,6 @@ router.get('/', (req, res, next) => {
     });
   }
   else {
-    // Get challenges
     pool.query('SELECT * FROM challenges', (error, challenges) => {
       if (error) throwError(res, next, error, 500);
       let challenges1 = challenges.map((thing) => ({ challenge: thing, places: [] }));

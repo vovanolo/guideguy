@@ -9,12 +9,19 @@ const { throwError } = require('../functions');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-  pool.query('SELECT * FROM places', function(error, results) {
+  pool.query('SELECT * FROM places', (error, results) => {
     if (error) throwError(res, next, error, 500);
-    if (results.length <= 0) {
-      throwError(res, next, 'No places found in db', 400);
+    if (results) {
+      if (results.length <= 0) {
+        throwError(res, next, 'No places found in db', 400);
+      }
+      else {
+        res.json(results);
+      }
     }
-    res.json(results);
+    else {
+      throwError(res, next, 'Error', 500);
+    }
   });
 });
 
