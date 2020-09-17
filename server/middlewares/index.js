@@ -10,36 +10,32 @@ function IsAdmin(req, res, next) {
       if (!err) {
         if (decoded.role === 'admin') {
           next();
-        }
-        else {
+        } else {
           res.status(401).send('Unauthorized access');
         }
-      }
-      else {
+      } else {
         throw err;
       }
     });
-  }
-  else {
+  } else {
     res.status(401).send('Unauthorized access');
   }
 }
 
 function IsLoggedIn(req, res, next) {
-  const authHeader = req.get('Authorization');
+  const authHeader = req.headers.authorization;
+  console.log(authHeader);
   if (authHeader != undefined) {
     const jwtToken = authHeader.split(' ')[1];
     jwt.verify(jwtToken, process.env.JWT_KEY, (err, decoded) => {
       if (!err) {
         req.user = decoded;
         next();
-      }
-      else {
+      } else {
         throw err;
       }
     });
-  }
-  else {
+  } else {
     res.status(401).send('Unauthorized access 1');
   }
 }
@@ -57,7 +53,7 @@ function errorHandler(error, req, res, next) {
   res.json({
     status: statusCode,
     message: error.message,
-    stack: process.env.NODE_ENV === 'production' ? '🚫' : error.stack
+    stack: process.env.NODE_ENV === 'production' ? '🚫' : error.stack,
   });
 }
 
