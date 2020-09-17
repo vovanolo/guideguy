@@ -1,0 +1,13 @@
+.Card {
+  border: 5px solid #cccccc;
+}
+
+.active {
+  compose: Card;
+  background-color: green;
+}
+
+.inactive {
+  compose: Card;
+  background-color: red;
+}

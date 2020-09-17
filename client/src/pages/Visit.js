@@ -1,29 +1,27 @@
-import React from "react";
-import axios from "axios";
+import React from 'react';
+import axios from 'axios';
 
 export default class Visit extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      response: "",
-    };
-  }
+  state = {
+    response: '',
+  };
 
   componentDidMount() {
     const visitToken = this.props.match.params.visitToken;
     axios
-      .post(`${process.env.REACT_APP_SERVER_HOST}/visit/${visitToken}`, {
+      .post(`${process.env.REACT_APP_SERVER_HOST}/visit/${visitToken}`, null, {
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwidXNlcm5hbWUiOiJhZG1pbiIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTU5NjI4MTQxNn0.qMuzjug-355aOKyQPQB77eOYYdiZniRB3KCrKVzIUrk",
+          Authorization: `Bearer ${localStorage.JWT_TOKEN}`,
         },
       })
       .then((res) => {
         this.setState({ response: res.data.message });
       })
       .catch((error) => {
-        this.setState({ response: JSON.stringify(error) });
+        this.setState({
+          response: JSON.stringify(error.response.data.message),
+        });
+        console.dir(error);
       });
   }
 
